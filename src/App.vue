@@ -4,8 +4,8 @@
       <div class="brand-block">
         <div class="brand-orb">B</div>
         <div>
-          <strong>BoneVibAuth</strong>
-          <span>骨振哨兵</span>
+          <strong>骨振识息</strong>
+          <span>利用头部振动反馈的隐式身份验证系统</span>
         </div>
       </div>
       <nav class="side-nav">
@@ -25,7 +25,7 @@
       <section id="console" class="hero-console">
         <div class="hero-copy">
           <el-tag class="hero-tag" effect="dark">Vue 3 · Django REST · HCR · MFCC · Siamese</el-tag>
-          <h1>BoneVibAuth 真实数据隐式身份认证平台</h1>
+          <h1>骨振识息隐式身份认证平台</h1>
           <p>
             前端已接入 Django API，可完成后端健康检查、HCR 样本注册、身份验证、认证结果展示和运行指标读取。
             系统围绕骨传导耳机头部接触响应构建端到端认证链路。
