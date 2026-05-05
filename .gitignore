@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Builds
+dist/
+build/
+*.egg-info/
+
+# Runtime data
+backend/db.sqlite3
+data/templates/*.joblib
+data/uploads/
+data/simulated/
+
+# Env / IDE
+.env
+.env.local
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*

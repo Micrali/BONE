@@ -1,0 +1,22 @@
+{
+  "name": "bone-vib-auth",
+  "version": "1.0.0",
+  "description": "BoneVibAuth - implicit authentication with head vibration feedback",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "latest",
+    "echarts": "latest",
+    "element-plus": "latest",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "latest",
+    "vite": "^7.0.0"
+  }
+}
