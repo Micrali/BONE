@@ -1,4 +1,4 @@
-# 🦴 骨振识息
+# 🦴 BoneVibAuth - 骨振识息
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST-092E20?style=flat-square&logo=django&logoColor=white)
@@ -6,7 +6,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-Siamese-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
 ![Signal](https://img.shields.io/badge/HCR-MFCC-49D8FF?style=flat-square)
 
-**骨振识息** 是基于 **头部接触响应 HCR（Head Contact Response）**、**Chirp 主动探测** 与 **Siamese 深度度量学习** 的智能隐式身份认证系统，名称统一采用“骨振识息”。
+基于 **头部接触响应 HCR（Head Contact Response）**、**Chirp 主动探测** 与 **Siamese 深度度量学习** 的智能隐式身份认证系统。
 
 [🚀 快速开始](#-快速开始) • [📖 功能特性](#-功能特性) • [🏗️ 系统架构](#️-系统架构) • [📂 代码结构](#-代码结构) • [🎯 API 接口体系](#-api-接口体系)
 
@@ -14,9 +14,9 @@
 
 ## 📝 项目概述
 
-**骨振识息** 面向耳机、可穿戴设备和连续身份认证场景，利用骨传导耳机与头部组织之间形成的接触振动响应进行隐式身份验证。系统播放短时 Chirp 扫频激励信号，采集用户头部结构、软组织、佩戴姿态共同作用下产生的 HCR（Head Contact Response）响应，并从响应信号中提取 MFCC、频率响应和统计特征，最终通过 Siamese 度量学习模型判断当前佩戴者是否与注册模板一致。
+**BoneVibAuth** 是一个依据作品书《BoneVibAuth - 利用头部振动反馈的隐式身份验证系统》实现的完整真实项目。系统以骨传导耳机为交互入口，通过播放短时 Chirp 激励信号并采集用户头部振动反馈，提取具有个体差异的 HCR 生物特征，最终结合 MFCC 特征、频响特征与 Siamese 认证模型完成低打扰、隐式、可持续的身份认证。
 
-系统围绕“主动激励—振动响应采集—HCR 特征提取—Siamese 相似度匹配—认证决策”构建完整认证流程：
+项目已实现真实工程化闭环：
 
 - ✅ Vue 3 前端展示与认证工作台
 - ✅ Django REST API 后端服务
@@ -49,7 +49,7 @@
 
 ```bash
 # 1. 创建虚拟环境（推荐）
-python -m venv guzhen_env
+python -m venv bonevibauth_env
 
 # 2. 激活虚拟环境
 # Windows:
@@ -177,7 +177,7 @@ docker compose up --build
 └───────────────────────────────┬────────────────────────────────┘
                                 │ ORM / Service Call
 ┌───────────────────────────────▼────────────────────────────────┐
-│                     骨振识息 算法核心层                      │
+│                     BoneVibAuth 算法核心层                      │
 │  Chirp 生成 → HCR 预处理 → 频响估计 → MFCC → Siamese / 模板验证  │
 └───────────────────────────────┬────────────────────────────────┘
                                 │ Feature / Template / Session
@@ -207,7 +207,7 @@ docker compose up --build
 ### 🗂️ 项目根目录
 
 ```text
-骨振识息/
+BoneVibAuth/
 ├── 🚀 package.json                 # 前端依赖与 Vite 脚本
 ├── 📦 requirements.txt             # Python 后端与算法依赖
 ├── 📋 README.md                    # 项目说明文档

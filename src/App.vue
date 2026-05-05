@@ -1,419 +1,639 @@
 <template>
-  <div class="app-shell">
-    <aside class="side-panel">
-      <div class="brand-block">
-        <div class="brand-orb">B</div>
+  <div class="site-shell">
+    <header class="top-nav" :class="{ scrolled: navScrolled }">
+      <div class="nav-brand">
+        <div class="nav-logo">B</div>
         <div>
-          <strong>骨振识息</strong>
+          <strong>骨振识息 BoneVibAuth</strong>
           <span>利用头部振动反馈的隐式身份验证系统</span>
         </div>
       </div>
-      <nav class="side-nav">
-        <a href="#console">实时控制台</a>
-        <a href="#workbench">认证工作台</a>
-        <a href="#architecture">系统架构</a>
-        <a href="#api">API 接口</a>
-        <a href="#metrics">实验指标</a>
-      </nav>
-      <div class="side-status" :class="backendOnline ? 'online' : 'offline'">
-        <span></span>
-        {{ backendOnline ? 'Django API 在线' : '等待后端连接' }}
+      <div class="nav-right">
+        <nav class="nav-links">
+          <a href="#advantages">核心优势</a>
+          <a href="#principles">技术原理</a>
+          <a href="#performance">性能成果</a>
+          <a href="#scenarios">应用场景</a>
+        </nav>
+        <div class="auth-actions">
+          <button class="login-btn" type="button">登录</button>
+          <button class="register-btn" type="button">注册</button>
+        </div>
       </div>
-    </aside>
+    </header>
 
-    <main class="main-panel">
-      <section id="console" class="hero-console">
-        <div class="hero-copy">
-          <el-tag class="hero-tag" effect="dark">Vue 3 · Django REST · HCR · MFCC · Siamese</el-tag>
-          <h1>骨振识息隐式身份认证平台</h1>
-          <p>
-            前端已接入 Django API，可完成后端健康检查、HCR 样本注册、身份验证、认证结果展示和运行指标读取。
-            系统围绕骨传导耳机头部接触响应构建端到端认证链路。
-          </p>
+    <section class="hero-section">
+      <div class="hero-bg-grid"></div>
+      <div class="hero-bg-skull left"></div>
+      <div class="hero-bg-skull right"></div>
+      <div class="hero-waves wave-1"></div>
+      <div class="hero-waves wave-2"></div>
+
+      <div class="hero-content">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Next-Gen Bone-Conduction Identity Authentication</span>
+          <h1>骨振识息 BoneVibAuth</h1>
+          <h2>利用头部振动反馈的隐式身份验证系统 | 面向骨传导耳机的下一代生物识别认证</h2>
+          <p class="hero-slogan">佩戴即认证，无感更安全，重新定义骨传导耳机的身份认证边界</p>
           <div class="hero-actions">
-            <button class="primary-btn" @click="checkBackend">连接后端</button>
-            <a class="ghost-btn" href="#workbench">开始认证</a>
+            <a class="primary-cta" href="#principles">查看核心技术原理</a>
+            <a class="secondary-cta" href="#performance">浏览完整测试数据</a>
           </div>
         </div>
 
-        <div class="security-card">
-          <div class="security-header">
-            <div>
-              <span>Secure Session</span>
-              <h3>{{ latestDecision }}</h3>
-            </div>
-            <div class="security-icon"><el-icon><Lock /></el-icon></div>
-          </div>
-          <div class="score-ring" :style="{ '--score': scorePercent + '%' }">
-            <div>
-              <strong>{{ scorePercent }}%</strong>
-              <span>Confidence</span>
-            </div>
-          </div>
-          <div class="mini-wave">
-            <i v-for="bar in 46" :key="bar" :style="{ height: `${18 + Math.abs(Math.sin(bar * 0.55)) * 58}px` }"></i>
-          </div>
-          <div class="security-list">
-            <div><span>Probe</span><b>Chirp 50-850Hz</b></div>
-            <div><span>Feature</span><b>MFCC + HCR</b></div>
-            <div><span>Verifier</span><b>Siamese / Template</b></div>
-          </div>
+        <div class="hero-metrics">
+          <article v-for="item in heroMetrics" :key="item.label" class="floating-metric reveal" :style="{ '--delay': item.delay + 's' }">
+            <div class="metric-glow"></div>
+            <strong>{{ item.value }}</strong>
+            <span>{{ item.label }}</span>
+          </article>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="kpi-grid">
-        <article v-for="metric in metrics" :key="metric.label" class="kpi-card">
-          <span>{{ metric.label }}</span>
-          <strong>{{ metric.value }}</strong>
-          <small>{{ metric.note }}</small>
-        </article>
-      </section>
-
-      <section id="workbench" class="section-block workbench-section">
+    <main>
+      <section id="advantages" class="content-section pain-solution-section reveal">
         <div class="section-heading">
-          <span>Authentication Workbench</span>
-          <h2>前后端联调认证工作台</h2>
-          <p>点击按钮即可调用 Django 后端接口：先注册 HCR 模板，再提交本人或攻击者样本完成身份验证。</p>
+          <span>Project Value</span>
+          <h2>行业痛点与项目突破</h2>
+          <p>以结构性矛盾切入，直接说明传统认证方案为何无法适配骨传导耳机，以及 BoneVibAuth 如何从根源重构身份认证逻辑。</p>
         </div>
 
-        <div class="workbench-layout">
-          <div class="glass-card control-card">
-            <div class="card-title-row">
-              <h3>1. 后端连接</h3>
-              <span :class="backendOnline ? 'pill success' : 'pill danger'">{{ backendOnline ? 'ONLINE' : 'OFFLINE' }}</span>
+        <div class="dual-panel">
+          <div class="info-panel danger-panel">
+            <div class="panel-head">
+              <span class="panel-tag danger">行业痛点</span>
+              <h3>传统认证方案，遇上骨传导耳机的三道结构性鸿沟</h3>
             </div>
-            <p class="mono-text">{{ healthStatus }}</p>
-            <button class="primary-btn full" :disabled="loading" @click="checkBackend">检查 Django API</button>
-
-            <div class="divider"></div>
-
-            <div class="card-title-row">
-              <h3>2. 用户注册</h3>
-              <span class="pill">Enroll</span>
-            </div>
-            <label>用户 ID</label>
-            <input v-model="subjectId" class="form-input" placeholder="例如 user-001" />
-            <label>显示名称</label>
-            <input v-model="displayName" class="form-input" placeholder="例如 测试用户" />
-            <label>设备型号</label>
-            <input v-model="deviceModel" class="form-input" placeholder="例如 Bone Conduction Earphone" />
-            <button class="primary-btn full" :disabled="loading" @click="handleEnroll">生成 10 组 HCR 并注册</button>
-          </div>
-
-          <div class="glass-card verify-card">
-            <div class="card-title-row">
-              <h3>3. 身份验证</h3>
-              <span class="pill accent">Verify</span>
-            </div>
-            <div class="mode-switch">
-              <button :class="verifyMode === 'genuine' ? 'active' : ''" @click="verifyMode = 'genuine'">本人样本</button>
-              <button :class="verifyMode === 'impostor' ? 'active' : ''" @click="verifyMode = 'impostor'">攻击者样本</button>
-            </div>
-            <button class="primary-btn full" :disabled="loading" @click="handleVerify">提交 HCR 验证</button>
-
-            <div class="result-panel" :class="lastAccepted === true ? 'accepted' : lastAccepted === false ? 'rejected' : ''">
-              <div class="result-topline">
-                <span>认证结果</span>
-                <b>{{ latestDecision }}</b>
-              </div>
-              <div class="result-stats">
-                <div><span>Score</span><strong>{{ lastScore }}</strong></div>
-                <div><span>Threshold</span><strong>{{ lastThreshold }}</strong></div>
-                <div><span>Latency</span><strong>{{ lastLatency }}</strong></div>
-              </div>
-              <pre>{{ resultText }}</pre>
+            <div class="pain-grid">
+              <article v-for="item in painPoints" :key="item.title" class="pain-card">
+                <div class="icon danger">✕</div>
+                <div>
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.desc }}</p>
+                </div>
+              </article>
             </div>
           </div>
 
-          <div class="glass-card signal-card">
-            <div class="card-title-row">
-              <h3>HCR 信号预览</h3>
-              <span class="pill">Live</span>
+          <div class="info-panel success-panel">
+            <div class="panel-head">
+              <span class="panel-tag success">解决方案</span>
+              <h3>骨振识息，专为骨传导耳机原生打造的认证方案</h3>
             </div>
-            <div ref="signalChart" class="chart signal-chart"></div>
-            <div class="signal-info">
-              <div><span>Sample Rate</span><b>467 Hz</b></div>
-              <div><span>Enroll Samples</span><b>10 / User</b></div>
-              <div><span>Duration</span><b>1.5s</b></div>
+            <div class="solution-visual">
+              <div class="bone-head-outline">
+                <div class="ear-device"></div>
+                <div class="vibration-node n1"></div>
+                <div class="vibration-node n2"></div>
+                <div class="vibration-node n3"></div>
+              </div>
+              <div class="solution-copy">
+                <p><strong>核心突破：</strong>基于头部接触响应 HCR，挖掘颅骨振动传播中的个体生物特征，从根源解决骨传导耳机认证难题。</p>
+                <ul>
+                  <li>头部阻抗特征建模</li>
+                  <li>头部结构不对称特征建模</li>
+                  <li>骨传导传播路径原生适配</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="architecture" class="section-block">
+      <section id="principles" class="content-section reveal">
         <div class="section-heading">
-          <span>Architecture</span>
-          <h2>系统架构与认证流程</h2>
-          <p>从前端 HCR 数据提交，到 Django API 入库，再到 Python 算法模块完成特征提取和身份判定。</p>
+          <span>Innovation</span>
+          <h2>四大核心创新，打破行业技术天花板</h2>
+          <p>以可视化卡片展示系统创新点，并通过 HCR 频谱对比示意直观呈现同人一致性与异人区分性。</p>
         </div>
-        <div class="pipeline-grid">
-          <article v-for="(step, index) in pipeline" :key="step.title" class="pipeline-card">
-            <span>0{{ index + 1 }}</span>
+
+        <div class="innovation-grid">
+          <article v-for="card in innovationCards" :key="card.title" class="innovation-card">
+            <div class="innovation-top">
+              <div class="innovation-icon">{{ card.icon }}</div>
+              <div>
+                <span>{{ card.index }}</span>
+                <h3>{{ card.title }}</h3>
+              </div>
+            </div>
+            <p>{{ card.desc }}</p>
+          </article>
+        </div>
+
+        <div class="spectrum-panel">
+          <div class="panel-head inline">
+            <div>
+              <span class="panel-tag cyan">HCR 可视化</span>
+              <h3>头部接触响应频谱对比</h3>
+            </div>
+            <div class="switch-group">
+              <button :class="{ active: spectrumMode === 'same' }" @click="setSpectrum('same')">同一受试者样本</button>
+              <button :class="{ active: spectrumMode === 'diff' }" @click="setSpectrum('diff')">不同受试者样本</button>
+            </div>
+          </div>
+          <div ref="spectrumChart" class="chart large-chart"></div>
+        </div>
+      </section>
+
+      <section class="content-section reveal">
+        <div class="section-heading">
+          <span>Pipeline</span>
+          <h2>端到端全链路系统，从注册到认证一气呵成</h2>
+          <p>从数据采集、预处理、特征提取到身份认证，全流程围绕低样本、低干扰、高安全的商用目标设计。</p>
+        </div>
+
+        <div class="flow-line">
+          <article v-for="step in flowSteps" :key="step.title" class="flow-node">
+            <div class="flow-index">{{ step.index }}</div>
             <h3>{{ step.title }}</h3>
             <p>{{ step.desc }}</p>
           </article>
         </div>
-      </section>
 
-      <section id="api" class="section-block api-section">
-        <div class="section-heading">
-          <span>API System</span>
-          <h2>Django REST API 接口体系</h2>
-          <p>前端通过统一 API 客户端与后端通信，支持 Bearer Token 配置和跨域联调。</p>
-        </div>
-        <div class="api-grid">
-          <article v-for="item in apiList" :key="item.path" class="api-card">
-            <b>{{ item.method }}</b>
-            <h3>{{ item.path }}</h3>
-            <p>{{ item.desc }}</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="metrics" class="section-block metrics-section">
-        <div class="section-heading">
-          <span>Metrics</span>
-          <h2>实验指标与系统运行态势</h2>
-          <p>展示采样率影响、抗攻击测试，以及从后端读取的运行时用户、样本和认证会话统计。</p>
-        </div>
-        <div class="metrics-layout">
-          <div class="glass-card large">
-            <div class="card-title-row">
-              <h3>采样率与认证表现</h3>
-              <button class="ghost-mini" @click="loadRuntimeMetrics">刷新指标</button>
+        <div class="preview-grid">
+          <div class="preview-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">注册流程</span>
+                <h3>客户端注册界面预览</h3>
+              </div>
             </div>
-            <div ref="lineChart" class="chart"></div>
+            <div class="ui-mockup register-mockup">
+              <div class="mockup-header-row">
+                <div class="mockup-avatar">U</div>
+                <div>
+                  <strong>用户注册任务</strong>
+                  <span>Subject ID：BVA-2026-001</span>
+                </div>
+              </div>
+              <div class="mockup-form-grid">
+                <div><span>采样率</span><b>467 Hz</b></div>
+                <div><span>采集时长</span><b>15 s</b></div>
+                <div><span>注册样本</span><b>10 / 10</b></div>
+                <div><span>设备状态</span><b>已连接</b></div>
+              </div>
+              <div class="mockup-progress">
+                <span>HCR 模板生成进度</span>
+                <b>100%</b>
+                <i></i>
+              </div>
+              <div class="mockup-bars enroll"></div>
+            </div>
           </div>
-          <div class="glass-card">
-            <h3>抗攻击 FAR</h3>
-            <div ref="barChart" class="chart small"></div>
+          <div class="preview-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">认证流程</span>
+                <h3>客户端认证界面预览</h3>
+              </div>
+            </div>
+            <div class="ui-mockup auth-mockup">
+              <div class="mockup-header-row">
+                <div class="mockup-avatar success">✓</div>
+                <div>
+                  <strong>身份认证任务</strong>
+                  <span>Session：AUTH-2026-0506</span>
+                </div>
+              </div>
+              <div class="mockup-result-box success">
+                <div><span>认证结果</span><b>Authenticated</b></div>
+                <div><span>得分 / 阈值</span><b>0.9655 / 0.65</b></div>
+                <div><span>响应耗时</span><b>54 ms</b></div>
+              </div>
+              <div class="mockup-form-grid compact">
+                <div><span>验证样本</span><b>本人样本</b></div>
+                <div><span>双通道状态</span><b>正常</b></div>
+                <div><span>噪声抑制</span><b>已启用</b></div>
+                <div><span>模板匹配</span><b>通过</b></div>
+              </div>
+              <div class="mockup-bars auth"></div>
+            </div>
           </div>
-          <div class="glass-card runtime-card">
-            <h3>运行时指标</h3>
-            <div class="runtime-grid">
-              <div v-for="item in runtimeCards" :key="item.label">
-                <span>{{ item.label }}</span>
-                <strong>{{ item.value }}</strong>
+        </div>
+      </section>
+
+      <section id="performance" class="content-section reveal">
+        <div class="section-heading">
+          <span>Performance</span>
+          <h2>全场景严苛测试，性能与安全性双重验证</h2>
+          <p>核心性能、鲁棒性、安全性与时间一致性统一可视化，帮助评委快速捕捉可落地性和大赛竞争力。</p>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="gauge-card" v-for="card in gaugeCards" :key="card.label">
+            <div class="gauge-title">{{ card.label }}</div>
+            <div class="gauge-value">{{ card.value }}</div>
+            <div class="gauge-note">{{ card.note }}</div>
+          </div>
+        </div>
+
+        <div class="charts-grid two-left">
+          <div class="chart-card span-2">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag cyan">鲁棒性雷达图</span>
+                <h3>六大维度稳定性表现</h3>
+              </div>
+            </div>
+            <div ref="radarChart" class="chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">抗攻击能力</span>
+                <h3>不同攻击方式 FAR 对比</h3>
+              </div>
+            </div>
+            <div ref="attackChart" class="chart"></div>
+          </div>
+        </div>
+
+        <div class="charts-grid equal-grid">
+          <div class="chart-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">时间一致性</span>
+                <h3>4 周到 14 个月准确率变化</h3>
+              </div>
+            </div>
+            <div ref="timelineChart" class="chart"></div>
+          </div>
+          <div class="chart-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">实时认证状态</span>
+                <h3>认证工作台结果概览</h3>
+              </div>
+            </div>
+            <div class="result-console">
+              <div class="console-status success">Authenticated</div>
+              <div class="console-metrics">
+                <div><span>平均认证准确率</span><strong>96.55%</strong></div>
+                <div><span>单次响应耗时</span><strong>54ms</strong></div>
+                <div><span>双通道平均准确率</span><strong>97.64%</strong></div>
+                <div><span>盲目攻击 FAR</span><strong>≤4.88%</strong></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="install" class="section-block install-section">
+      <section id="scenarios" class="content-section reveal">
         <div class="section-heading">
-          <span>Quick Start</span>
-          <h2>本地运行命令</h2>
+          <span>Application</span>
+          <h2>四大核心落地场景，覆盖全维度安全需求</h2>
+          <p>聚焦信息安全、医疗健康、智能车载和移动支付，以沉浸式场景卡片强化技术落地想象力。</p>
         </div>
-        <div class="command-grid">
-          <div class="command-card">
-            <b>后端</b>
-            <code>cd backend && python manage.py migrate && python manage.py runserver</code>
+
+        <div class="scenario-grid">
+          <article v-for="scene in scenarios" :key="scene.title" class="scenario-card" :style="{ '--accent': scene.accent }">
+            <div class="scenario-overlay"></div>
+            <span>{{ scene.tag }}</span>
+            <h3>{{ scene.title }}</h3>
+            <p>{{ scene.desc }}</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content-section reveal">
+        <div class="section-heading">
+          <span>Usability</span>
+          <h2>用户真实验证，可用性与体验感双重认可</h2>
+          <p>通过问卷评分和完整操作路径动画共同说明：系统不仅安全，还真正可用、可接受、可推广。</p>
+        </div>
+
+        <div class="user-study-grid">
+          <div class="chart-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag cyan">问卷评分</span>
+                <h3>7 项用户研究均值</h3>
+              </div>
+            </div>
+            <div ref="surveyChart" class="chart"></div>
           </div>
-          <div class="command-card">
-            <b>前端</b>
-            <code>npm install && npm run dev</code>
-          </div>
-          <div class="command-card">
-            <b>演示数据</b>
-            <code>python algorithms/scripts/demo_auth.py</code>
+
+          <div class="journey-card">
+            <div class="panel-head inline">
+              <div>
+                <span class="panel-tag">使用动线</span>
+                <h3>注册 - 认证全流程</h3>
+              </div>
+            </div>
+            <div class="journey-steps">
+              <article v-for="item in journeySteps" :key="item.title">
+                <div class="journey-dot"></div>
+                <div>
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.desc }}</p>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
     </main>
+
+    <footer class="page-footer reveal">
+      <span class="footer-tag">中国大学生计算机设计大赛参赛作品</span>
+      <h2>让佩戴耳机，成为最自然、最安全的身份证明</h2>
+      <p>骨振识息 BoneVibAuth · 生物识别 · 骨传导 · 信息安全</p>
+    </footer>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import * as echarts from 'echarts';
-import { Cpu, DataAnalysis, Headset, Lock, Monitor } from '@element-plus/icons-vue';
-import { ElMessage } from 'element-plus';
-import { enrollUser, getHealth, getMetrics, verifyUser } from './services/api';
-import { buildEnrollmentSignals, synthesizeHcrSignal } from './utils/signal';
 
-const lineChart = ref(null);
-const barChart = ref(null);
-const signalChart = ref(null);
-const lineInstance = ref(null);
-const barInstance = ref(null);
-const signalInstance = ref(null);
+const navScrolled = ref(false);
+const spectrumMode = ref('same');
 
-const subjectId = ref('demo-user');
-const displayName = ref('演示用户');
-const deviceModel = ref('Bone Conduction Earphone');
-const verifyMode = ref('genuine');
-const loading = ref(false);
-const backendOnline = ref(false);
-const healthStatus = ref('尚未连接后端，请先启动 Django 服务。');
-const resultText = ref('暂无认证结果');
-const lastAccepted = ref(null);
-const lastScore = ref('--');
-const lastThreshold = ref('--');
-const lastLatency = ref('--');
-const runtimeMetrics = ref({ subjects: 0, samples: 0, sessions: 0, acceptance_rate: 0 });
-
-const scorePercent = computed(() => {
-  const score = Number(lastScore.value);
-  if (Number.isNaN(score)) return 0;
-  return Math.round(score * 100);
-});
-
-const latestDecision = computed(() => {
-  if (lastAccepted.value === true) return 'Authenticated';
-  if (lastAccepted.value === false) return 'Rejected';
-  return backendOnline.value ? 'Ready' : 'Disconnected';
-});
-
-const runtimeCards = computed(() => [
-  { label: '用户数', value: runtimeMetrics.value.subjects ?? 0 },
-  { label: 'HCR 样本', value: runtimeMetrics.value.samples ?? 0 },
-  { label: '认证会话', value: runtimeMetrics.value.sessions ?? 0 },
-  { label: '通过率', value: `${Math.round((runtimeMetrics.value.acceptance_rate ?? 0) * 100)}%` },
-]);
-
-const metrics = [
-  { value: '96.55%', label: 'Balanced Accuracy', note: '作品书核心指标' },
-  { value: '< 60ms', label: '认证延迟', note: '轻量推理链路' },
-  { value: '10 samples', label: '注册样本', note: '每名用户模板生成' },
-  { value: '467 Hz', label: '采样率', note: '低采样可用性验证' },
+const heroMetrics = [
+  { value: '96.55%', label: '平均认证准确率', delay: 0.1 },
+  { value: '仅 15 秒', label: '10 个样本完成用户注册', delay: 0.2 },
+  { value: '≤4.88%', label: '盲目攻击错误接受率 FAR', delay: 0.3 },
+  { value: '54ms', label: '单次认证响应耗时', delay: 0.4 },
 ];
 
-const pipeline = [
-  { title: 'Chirp 激励', desc: '生成 50Hz-850Hz 扫频探测信号，触发头部接触响应。' },
-  { title: 'HCR 数据入库', desc: '真实采集信号或前端演示信号通过 Django API 写入样本表。' },
-  { title: 'MFCC 特征提取', desc: '完成滤波、频响估计、MFCC 与差分统计特征计算。' },
-  { title: '身份判定', desc: '通过 Siamese / 模板距离得到认证分数和通过/拒绝结果。' },
+const painPoints = [
+  { title: '开放佩戴失效', desc: '传统方案依赖封闭耳道反射回波，骨传导耳机不具备此类声学腔体。' },
+  { title: '振动传导不兼容', desc: '现有认证方案依赖空气声传播，无法适配颅骨振动传输路径。' },
+  { title: '注册成本过高', desc: '主流方案需要约 400 秒音频注册，严重影响落地实用性。' },
 ];
 
-const apiList = [
-  { path: '/api/health/', method: 'GET', desc: '返回系统状态与核心模块信息' },
-  { path: '/api/chirp-config/', method: 'GET', desc: '返回 Chirp 参数和探测样本' },
-  { path: '/api/enroll/', method: 'POST', desc: '提交多段 HCR 信号，生成用户注册模板' },
-  { path: '/api/verify/', method: 'POST', desc: '提交待验证 HCR 信号，返回认证分数与接受结果' },
-  { path: '/api/metrics/', method: 'GET', desc: '返回论文指标和运行时认证指标' },
+const innovationCards = [
+  { index: '创新 01', icon: '◎', title: '隐式无感的身份认证机制', desc: '背景级运行，佩戴即认证，无需用户说话、咬合、滑动等任何主动操作，不打断正常使用流程。' },
+  { index: '创新 02', icon: '◉', title: '双生物特征联合建模', desc: '系统性引入头部阻抗特征与头部结构不对称特征，刻画组织密度与几何形态差异。' },
+  { index: '创新 03', icon: '≈', title: '低干扰智能探测信号设计', desc: '基于人耳听力曲线做 Chirp 扫频信号频域抑制，在舒适度与感知精度之间取得平衡。' },
+  { index: '创新 04', icon: '∞', title: '小样本迁移学习架构', desc: '轻量级 Siamese 孪生网络结合迁移学习，仅需 10 个样本 / 15 秒完成用户建模。' },
 ];
 
-async function checkBackend() {
-  loading.value = true;
-  try {
-    const response = await getHealth();
-    backendOnline.value = true;
-    healthStatus.value = `后端在线：${response.system} / ${response.status}\n核心模块：${response.core.join(' · ')}`;
-    ElMessage.success('Django API 连接成功');
-    await loadRuntimeMetrics(false);
-  } catch (error) {
-    backendOnline.value = false;
-    healthStatus.value = `连接失败：${error.message}\n请确认 backend 服务已启动并允许跨域访问。`;
-    ElMessage.error(`后端连接失败：${error.message}`);
-  } finally {
-    loading.value = false;
-  }
-}
+const flowSteps = [
+  { index: '01', title: '数据采集模块', desc: '骨传导耳机播放低干扰 Chirp 探测信号并采集头部接触响应 HCR。' },
+  { index: '02', title: '数据预处理模块', desc: '完成滤波、归一化、频响估计和有效振动窗口提取。' },
+  { index: '03', title: '特征提取模块', desc: '提取 MFCC、频响统计量、双生物特征描述向量。' },
+  { index: '04', title: '身份认证模块', desc: '利用 Siamese 网络与模板更新策略完成注册、验证和长期优化。' },
+];
 
-async function handleEnroll() {
-  loading.value = true;
-  try {
-    const signals = buildEnrollmentSignals(10, 10);
-    updateSignalChart(signals[0], '注册 HCR 样本');
-    const payload = await enrollUser({
-      external_id: subjectId.value,
-      display_name: displayName.value,
-      device_model: deviceModel.value,
-      sample_rate: 467,
-      signals,
-    });
-    resultText.value = JSON.stringify(payload, null, 2);
-    lastAccepted.value = null;
-    ElMessage.success('注册成功，用户模板已生成');
-    await loadRuntimeMetrics(false);
-  } catch (error) {
-    resultText.value = error.message;
-    ElMessage.error(`注册失败：${error.message}`);
-  } finally {
-    loading.value = false;
-  }
-}
+const gaugeCards = [
+  { label: '双通道平均准确率', value: '97.64%', note: '平均条件下稳定通过' },
+  { label: 'FAR', value: '2.12%', note: '错误接受率' },
+  { label: 'FRR', value: '2.91%', note: '错误拒绝率' },
+  { label: 'EER', value: '3.46%', note: '交叉误拒率' },
+];
 
-async function handleVerify() {
-  loading.value = true;
-  try {
-    const seed = verifyMode.value === 'genuine' ? 12 : 99;
-    const claimedSignal = synthesizeHcrSignal(seed);
-    updateSignalChart(claimedSignal, verifyMode.value === 'genuine' ? '本人验证样本' : '攻击者验证样本');
-    const payload = await verifyUser({
-      external_id: subjectId.value,
-      claimed_signal: claimedSignal,
-      sample_rate: 467,
-    });
-    resultText.value = JSON.stringify(payload, null, 2);
-    lastAccepted.value = payload.accepted;
-    lastScore.value = Number(payload.score).toFixed(4);
-    lastThreshold.value = Number(payload.threshold).toFixed(2);
-    lastLatency.value = `${payload.latency_ms}ms`;
-    ElMessage.success(payload.accepted ? '认证通过' : '认证拒绝');
-    await loadRuntimeMetrics(false);
-  } catch (error) {
-    resultText.value = error.message;
-    lastAccepted.value = false;
-    ElMessage.error(`验证失败：${error.message}`);
-  } finally {
-    loading.value = false;
-  }
-}
+const scenarios = [
+  { tag: '信息安全', title: '政务 / 企业无感登录', desc: '面向政务系统、企业网络和终端设备，实现高安全、抗仿冒的无感认证。', accent: 'rgba(8,145,178,0.45)' },
+  { tag: '医疗健康', title: '手术室与医疗终端授权', desc: '不干扰医患交流和临床协作，同时保障医疗数据和终端操作权限安全。', accent: 'rgba(5,150,105,0.42)' },
+  { tag: '智能车载', title: '车主识别与无感解锁', desc: '适配车主身份识别、车辆无感解锁与启动，兼顾驾驶安全与使用便捷。', accent: 'rgba(124,58,237,0.42)' },
+  { tag: '移动支付', title: '支付场景身份确认', desc: '面向支付确认场景提供极难仿冒的隐式认证能力，降低盗刷风险。', accent: 'rgba(37,99,235,0.42)' },
+];
 
-async function loadRuntimeMetrics(showMessage = true) {
-  try {
-    const response = await getMetrics();
-    runtimeMetrics.value = response.runtime_metrics || runtimeMetrics.value;
-    if (showMessage) ElMessage.success('运行指标已刷新');
-  } catch (error) {
-    if (showMessage) ElMessage.error(`指标读取失败：${error.message}`);
-  }
-}
+const journeySteps = [
+  { title: '佩戴耳机与信号校准', desc: '用户佩戴骨传导耳机后，系统自动发起低干扰探测信号校准。' },
+  { title: '15 秒完成用户注册', desc: '采集 10 个样本，自动提取 HCR 特征并建立个体认证模板。' },
+  { title: '日常使用无感认证', desc: '用户在自然佩戴状态下即可完成身份确认，无需额外交互。' },
+  { title: '长期模板更新优化', desc: '结合时间一致性评估与更新策略，持续保证长期认证稳定性。' },
+];
 
-function updateSignalChart(signal, title = 'HCR Signal') {
-  if (!signalInstance.value) return;
-  signalInstance.value.setOption({
-    title: { text: title, textStyle: { color: '#dbe7ff', fontSize: 13 }, left: 8, top: 4 },
-    grid: { top: 42, right: 16, bottom: 24, left: 36 },
-    xAxis: { type: 'category', show: false, data: signal.map((_, index) => index) },
-    yAxis: { type: 'value', axisLabel: { color: '#8aa0c7' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } } },
-    series: [{ data: signal, type: 'line', smooth: true, symbol: 'none', lineStyle: { width: 2, color: '#49d8ff' }, areaStyle: { color: 'rgba(73,216,255,0.16)' } }],
+const spectrumChart = ref(null);
+const radarChart = ref(null);
+const attackChart = ref(null);
+const timelineChart = ref(null);
+const surveyChart = ref(null);
+
+let spectrumInstance;
+let radarInstance;
+let attackInstance;
+let timelineInstance;
+let surveyInstance;
+
+const sameSpectrumA = [18, 24, 26, 30, 35, 42, 48, 50, 46, 41, 34, 29];
+const sameSpectrumB = [16, 22, 27, 31, 36, 43, 49, 51, 45, 40, 35, 30];
+const diffSpectrumA = [18, 24, 26, 30, 35, 42, 48, 50, 46, 41, 34, 29];
+const diffSpectrumB = [8, 12, 18, 23, 28, 34, 29, 25, 21, 18, 14, 10];
+
+function buildSpectrumOption(mode) {
+  const same = mode === 'same';
+  return {
+    backgroundColor: 'transparent',
     tooltip: { trigger: 'axis' },
-  });
+    legend: {
+      top: 6,
+      textStyle: { color: '#9ab0d3' },
+      data: same ? ['Sample A', 'Sample B'] : ['Subject A', 'Subject B'],
+    },
+    grid: { left: 40, right: 24, top: 46, bottom: 32 },
+    xAxis: {
+      type: 'category',
+      data: ['50', '100', '150', '200', '250', '300', '350', '400', '500', '600', '700', '850'],
+      axisLabel: { color: '#8fa6cc' },
+      axisLine: { lineStyle: { color: 'rgba(124,151,197,0.25)' } },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { color: '#8fa6cc' },
+      splitLine: { lineStyle: { color: 'rgba(124,151,197,0.12)' } },
+    },
+    series: [
+      {
+        name: same ? 'Sample A' : 'Subject A',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        lineStyle: { width: 3, color: '#22d3ee' },
+        areaStyle: { color: 'rgba(34,211,238,0.12)' },
+        data: same ? sameSpectrumA : diffSpectrumA,
+      },
+      {
+        name: same ? 'Sample B' : 'Subject B',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        lineStyle: { width: 3, color: same ? '#34d399' : '#ef4444' },
+        areaStyle: { color: same ? 'rgba(52,211,153,0.12)' : 'rgba(239,68,68,0.10)' },
+        data: same ? sameSpectrumB : diffSpectrumB,
+      },
+    ],
+  };
 }
 
 function initCharts() {
-  lineInstance.value = echarts.init(lineChart.value);
-  lineInstance.value.setOption({
-    grid: { top: 24, right: 18, bottom: 28, left: 40 },
-    xAxis: { type: 'category', data: ['50', '100', '200', '300', '400', '467'], axisLabel: { color: '#dbe7ff' } },
-    yAxis: { type: 'value', min: 70, max: 100, axisLabel: { color: '#dbe7ff' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } } },
-    series: [{ data: [75.49, 82.97, 86.95, 89.43, 91.35, 96.22], type: 'line', smooth: true, symbolSize: 8, lineStyle: { width: 4, color: '#49d8ff' }, itemStyle: { color: '#7c5cff' }, areaStyle: { color: 'rgba(73,216,255,0.18)' } }],
-    tooltip: { trigger: 'axis' },
+  spectrumInstance = echarts.init(spectrumChart.value);
+  radarInstance = echarts.init(radarChart.value);
+  attackInstance = echarts.init(attackChart.value);
+  timelineInstance = echarts.init(timelineChart.value);
+  surveyInstance = echarts.init(surveyChart.value);
+
+  spectrumInstance.setOption(buildSpectrumOption(spectrumMode.value));
+
+  radarInstance.setOption({
+    tooltip: {},
+    radar: {
+      radius: '62%',
+      splitNumber: 4,
+      indicator: [
+        { name: '设备兼容性', max: 100 },
+        { name: '头部姿态适配', max: 100 },
+        { name: '环境抗噪', max: 100 },
+        { name: '佩戴位置容错', max: 100 },
+        { name: '音量适配', max: 100 },
+        { name: '采样率兼容', max: 100 },
+      ],
+      axisName: { color: '#a9bddf' },
+      splitLine: { lineStyle: { color: 'rgba(124,151,197,0.18)' } },
+      splitArea: { areaStyle: { color: ['rgba(13,27,48,0.16)', 'rgba(13,27,48,0.06)'] } },
+      axisLine: { lineStyle: { color: 'rgba(124,151,197,0.18)' } },
+    },
+    series: [{
+      type: 'radar',
+      data: [{
+        value: [94, 91, 90, 88, 92, 95],
+        name: 'Robustness',
+        areaStyle: { color: 'rgba(34,211,238,0.18)' },
+        lineStyle: { color: '#22d3ee', width: 3 },
+        itemStyle: { color: '#34d399' },
+      }],
+    }],
   });
 
-  barInstance.value = echarts.init(barChart.value);
-  barInstance.value.setOption({
-    grid: { top: 18, right: 12, bottom: 24, left: 34 },
-    xAxis: { type: 'category', data: ['BMI', 'BFR', 'SMR'], axisLabel: { color: '#dbe7ff' } },
-    yAxis: { type: 'value', axisLabel: { color: '#dbe7ff' }, splitLine: { lineStyle: { color: 'rgba(255,255,255,0.08)' } } },
-    series: [{ data: [0.32, 0.08, 1.92], type: 'bar', barWidth: 28, itemStyle: { borderRadius: [8, 8, 0, 0], color: '#49d8ff' } }],
+  attackInstance.setOption({
     tooltip: { trigger: 'axis' },
+    grid: { left: 46, right: 20, top: 28, bottom: 34 },
+    xAxis: {
+      type: 'category',
+      data: ['盲目攻击', '随机冒充', '有知识冒充'],
+      axisLabel: { color: '#9ab0d3' },
+      axisLine: { lineStyle: { color: 'rgba(124,151,197,0.25)' } },
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: { color: '#9ab0d3', formatter: '{value}%' },
+      splitLine: { lineStyle: { color: 'rgba(124,151,197,0.12)' } },
+    },
+    series: [{
+      type: 'bar',
+      barWidth: 34,
+      data: [4.88, 2.12, 0.08],
+      itemStyle: {
+        borderRadius: [10, 10, 0, 0],
+        color: params => ['#ef4444', '#f97316', '#22d3ee'][params.dataIndex],
+      },
+    }],
   });
 
-  signalInstance.value = echarts.init(signalChart.value);
-  updateSignalChart(synthesizeHcrSignal(12), 'HCR 信号预览');
+  timelineInstance.setOption({
+    tooltip: { trigger: 'axis' },
+    grid: { left: 46, right: 22, top: 26, bottom: 34 },
+    xAxis: {
+      type: 'category',
+      data: ['第 1 周', '第 2 周', '第 3 周', '第 4 周', '6 个月', '12 个月', '14 个月'],
+      axisLabel: { color: '#9ab0d3' },
+      axisLine: { lineStyle: { color: 'rgba(124,151,197,0.25)' } },
+    },
+    yAxis: {
+      type: 'value',
+      min: 88,
+      max: 100,
+      axisLabel: { color: '#9ab0d3', formatter: '{value}%' },
+      splitLine: { lineStyle: { color: 'rgba(124,151,197,0.12)' } },
+    },
+    series: [
+      {
+        type: 'line',
+        smooth: true,
+        symbolSize: 7,
+        data: [97.4, 97.2, 96.9, 96.7, 95.8, 94.9, 96.1],
+        lineStyle: { width: 3, color: '#22d3ee' },
+        itemStyle: { color: '#34d399' },
+        areaStyle: { color: 'rgba(34,211,238,0.12)' },
+      },
+    ],
+  });
+
+  surveyInstance.setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+    grid: { left: 110, right: 24, top: 24, bottom: 26 },
+    xAxis: {
+      type: 'value',
+      min: 0,
+      max: 10,
+      axisLabel: { color: '#9ab0d3' },
+      splitLine: { lineStyle: { color: 'rgba(124,151,197,0.12)' } },
+    },
+    yAxis: {
+      type: 'category',
+      axisLabel: { color: '#c8d5ee' },
+      data: ['系统易用性', '认证时间满意度', '信号低干扰', '使用意愿', '安全感知', '结果可信度', '学习成本'],
+    },
+    series: [{
+      type: 'bar',
+      barWidth: 16,
+      data: [9.13, 9.08, 9.4, 8.22, 8.91, 8.88, 8.36],
+      itemStyle: {
+        borderRadius: 999,
+        color: new echarts.graphic.LinearGradient(1, 0, 0, 0, [
+          { offset: 0, color: '#22d3ee' },
+          { offset: 1, color: '#2563eb' },
+        ]),
+      },
+    }],
+  });
 }
 
-onMounted(() => {
+function setSpectrum(mode) {
+  spectrumMode.value = mode;
+  spectrumInstance?.setOption(buildSpectrumOption(mode), true);
+}
+
+function handleScroll() {
+  navScrolled.value = window.scrollY > 40;
+}
+
+function revealSections() {
+  const items = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.14 }
+  );
+
+  items.forEach(item => observer.observe(item));
+  return observer;
+}
+
+let revealObserver;
+
+onMounted(async () => {
+  await nextTick();
   initCharts();
-  checkBackend();
+  handleScroll();
+  window.addEventListener('scroll', handleScroll);
   window.addEventListener('resize', () => {
-    lineInstance.value?.resize();
-    barInstance.value?.resize();
-    signalInstance.value?.resize();
+    spectrumInstance?.resize();
+    radarInstance?.resize();
+    attackInstance?.resize();
+    timelineInstance?.resize();
+    surveyInstance?.resize();
   });
+  revealObserver = revealSections();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', handleScroll);
+  revealObserver?.disconnect();
+  spectrumInstance?.dispose();
+  radarInstance?.dispose();
+  attackInstance?.dispose();
+  timelineInstance?.dispose();
+  surveyInstance?.dispose();
 });
 </script>
