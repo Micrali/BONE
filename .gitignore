@@ -26,3 +26,6 @@ data/simulated/
 # Logs
 *.log
 npm-debug.log*
+
+*.pdf
+*.pptx
