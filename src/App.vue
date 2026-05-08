@@ -38,6 +38,7 @@
           <div class="hero-actions">
             <a class="primary-cta" href="#principles">查看核心技术原理</a>
             <a class="secondary-cta" href="#performance">浏览完整测试数据</a>
+            <button class="secondary-cta demo-launch" type="button" @click="runAutoDemo">一键自动认证</button>
           </div>
         </div>
 
@@ -170,14 +171,32 @@
               <div class="mockup-form-grid">
                 <div><span>采样率</span><b>467 Hz</b></div>
                 <div><span>采集时长</span><b>15 s</b></div>
-                <div><span>注册样本</span><b>10 / 10</b></div>
+                <div><span>注册样本</span><b>{{ enrollFiles.filter(Boolean).length }} / 10</b></div>
                 <div><span>设备状态</span><b>已连接</b></div>
+              </div>
+              <div class="sample-uploader">
+                <div class="sample-ring" :style="{ '--progress': enrollProgress + '%' }">
+                  <strong>{{ enrollFiles.filter(Boolean).length }}</strong>
+                  <span>/ 10</span>
+                </div>
+                <div class="sample-control">
+                  <label class="upload-main-btn">
+                    批量上传注册样本
+                    <input type="file" accept="audio/*" multiple @change="onEnrollBatchChange" />
+                  </label>
+                  <button class="ghost-demo-btn" type="button" @click="useDefaultEnrollSamples">使用默认样本</button>
+                  <button class="ghost-demo-btn" type="button" @click="runEnrollAutoDemo">自动采集 10 组样本</button>
+                  <div class="sample-chips">
+                    <span v-for="idx in 10" :key="`chip-${idx}`" :class="{ active: enrollFiles[idx - 1] }">{{ idx }}</span>
+                  </div>
+                </div>
               </div>
               <div class="mockup-progress">
                 <span>HCR 模板生成进度</span>
-                <b>100%</b>
-                <i></i>
+                <b>{{ enrollProgress }}%</b>
+                <i :style="{ width: enrollProgress + '%' }"></i>
               </div>
+              <p class="demo-hint">支持手动上传 10 个样本，也可以使用默认样本或一键完成注册采集流程。</p>
               <div class="mockup-bars enroll"></div>
             </div>
           </div>
@@ -190,22 +209,36 @@
             </div>
             <div class="ui-mockup auth-mockup">
               <div class="mockup-header-row">
-                <div class="mockup-avatar success">✓</div>
+                <div class="mockup-avatar" :class="{ success: authResult.pass }">{{ authResult.pass ? '✓' : '?' }}</div>
                 <div>
                   <strong>身份认证任务</strong>
                   <span>Session：AUTH-2026-0506</span>
                 </div>
               </div>
-              <div class="mockup-result-box success">
-                <div><span>认证结果</span><b>Authenticated</b></div>
-                <div><span>得分 / 阈值</span><b>0.9655 / 0.65</b></div>
-                <div><span>响应耗时</span><b>54 ms</b></div>
+              <div class="auth-upload-row">
+                <label class="upload-item wide">
+                  <span>认证样本 A</span>
+                  <input type="file" accept="audio/*" @change="authFileA = $event.target.files?.[0] || null" />
+                </label>
+                <label class="upload-item wide">
+                  <span>认证样本 B</span>
+                  <input type="file" accept="audio/*" @change="authFileB = $event.target.files?.[0] || null" />
+                </label>
+                <button class="ghost-demo-btn" type="button" @click="useDefaultAuthSamples">默认通过样本</button>
+                <button class="auth-demo-btn" type="button" @click="runAuthDemo">开始认证分析</button>
+                <button class="ghost-demo-btn full-row" type="button" @click="runAuthRejectDemo">默认攻击样本</button>
+              </div>
+              <p class="demo-hint">可选择默认通过样本展示合法用户认证结果，也可选择默认攻击样本展示非法样本拒绝结果。</p>
+              <div class="mockup-result-box" :class="authResult.pass ? 'success' : 'danger'">
+                <div><span>认证结果</span><b>{{ authResult.label }}</b></div>
+                <div><span>得分 / 阈值</span><b>{{ authResult.score }} / {{ authResult.threshold }}</b></div>
+                <div><span>响应耗时</span><b>{{ authResult.cost }}</b></div>
               </div>
               <div class="mockup-form-grid compact">
-                <div><span>验证样本</span><b>本人样本</b></div>
+                <div><span>验证样本</span><b>双样本上传</b></div>
                 <div><span>双通道状态</span><b>正常</b></div>
                 <div><span>噪声抑制</span><b>已启用</b></div>
-                <div><span>模板匹配</span><b>通过</b></div>
+                <div><span>模板匹配</span><b>{{ authResult.pass ? '通过' : '未通过' }}</b></div>
               </div>
               <div class="mockup-bars auth"></div>
             </div>
@@ -350,6 +383,12 @@ import * as echarts from 'echarts';
 const navScrolled = ref(false);
 const spectrumMode = ref('same');
 
+const enrollFiles = ref(Array(10).fill(null));
+const enrollProgress = ref(0);
+const authFileA = ref(null);
+const authFileB = ref(null);
+const authResult = ref({ label: '待认证', score: '--', threshold: '0.65', cost: '--', pass: false });
+
 const heroMetrics = [
   { value: '96.55%', label: '平均认证准确率', delay: 0.1 },
   { value: '仅 15 秒', label: '10 个样本完成用户注册', delay: 0.2 },
@@ -414,6 +453,27 @@ const sameSpectrumA = [18, 24, 26, 30, 35, 42, 48, 50, 46, 41, 34, 29];
 const sameSpectrumB = [16, 22, 27, 31, 36, 43, 49, 51, 45, 40, 35, 30];
 const diffSpectrumA = [18, 24, 26, 30, 35, 42, 48, 50, 46, 41, 34, 29];
 const diffSpectrumB = [8, 12, 18, 23, 28, 34, 29, 25, 21, 18, 14, 10];
+const autoEnrollFiles = [
+  'sample_01.wav', 'sample_02.wav', 'sample_03.wav', 'sample_04.wav', 'sample_05.wav',
+  'sample_06.wav', 'sample_07.wav', 'sample_08.wav', 'sample_09.wav', 'sample_10.wav',
+];
+const authRejectFiles = [
+  { name: 'auth_diff_a.wav', size: 61000 },
+  { name: 'auth_diff_b.wav', size: 18000 },
+];
+
+const enrollSpectra = [
+  [12, 16, 20, 24, 28, 34, 39, 41, 38, 34, 28, 22],
+  [13, 17, 21, 25, 29, 35, 40, 42, 39, 35, 29, 23],
+  [15, 20, 24, 28, 33, 39, 44, 46, 42, 38, 32, 26],
+  [16, 21, 25, 29, 34, 40, 45, 47, 43, 39, 33, 27],
+  [17, 22, 26, 31, 36, 42, 47, 49, 44, 40, 34, 28],
+  [18, 23, 27, 32, 37, 43, 48, 50, 45, 41, 35, 29],
+  [18, 24, 28, 33, 38, 44, 49, 51, 46, 42, 36, 30],
+  [19, 24, 29, 34, 39, 45, 50, 52, 47, 43, 37, 31],
+  [19, 25, 29, 35, 40, 46, 51, 53, 48, 44, 38, 31],
+  [20, 26, 30, 36, 41, 47, 52, 54, 49, 45, 39, 32],
+];
 
 function buildSpectrumOption(mode) {
   const same = mode === 'same';
@@ -586,6 +646,160 @@ function initCharts() {
 function setSpectrum(mode) {
   spectrumMode.value = mode;
   spectrumInstance?.setOption(buildSpectrumOption(mode), true);
+}
+
+function pseudoSpectrumFromFile(file, variant = 0) {
+  const seed = (file?.name || '').split('').reduce((acc, ch) => acc + ch.charCodeAt(0), 0) + Math.floor((file?.size || 0) / 2048) + variant * 17;
+  return Array.from({ length: 12 }, (_, i) => {
+    const base = 14 + i * 2.2;
+    const wave = Math.sin((seed + i * 11) * 0.07) * 7 + Math.cos((seed + i * 3) * 0.05) * 3;
+    return Math.max(6, Math.round(base + wave));
+  });
+}
+
+function updateEnrollPreview() {
+  const uploadedCount = enrollFiles.value.filter(Boolean).length;
+  enrollProgress.value = Math.min(100, Math.round((uploadedCount / 10) * 100));
+
+  const latest = [...enrollFiles.value].reverse().find(Boolean);
+  if (latest) {
+    const latestSpectrum = pseudoSpectrumFromFile(latest, 1);
+    spectrumInstance?.setOption({
+      legend: { data: ['Template Ref', 'Latest Upload'] },
+      series: [
+        { name: 'Template Ref', data: sameSpectrumA },
+        { name: 'Latest Upload', data: latestSpectrum },
+      ],
+    });
+  }
+}
+
+function onEnrollBatchChange(event) {
+  const files = Array.from(event.target.files || []).slice(0, 10);
+  enrollFiles.value = Array.from({ length: 10 }, (_, index) => files[index] || null);
+  updateEnrollPreview();
+}
+
+function useDefaultEnrollSamples() {
+  enrollFiles.value = Array(10).fill(null);
+  enrollProgress.value = 0;
+  let current = 0;
+  const timer = window.setInterval(() => {
+    enrollFiles.value[current] = {
+      name: autoEnrollFiles[current],
+      size: 48000 + current * 1024,
+    };
+    updateEnrollPreview();
+    current += 1;
+    if (current >= 10) {
+      window.clearInterval(timer);
+      spectrumInstance?.setOption({
+        legend: { data: ['Template Ref', 'Latest Upload'] },
+        series: [
+          { name: 'Template Ref', data: sameSpectrumA },
+          { name: 'Latest Upload', data: sameSpectrumB },
+        ],
+      }, true);
+    }
+  }, 120);
+}
+
+function runEnrollAutoDemo() {
+  enrollFiles.value = Array(10).fill(null);
+  enrollProgress.value = 0;
+  let current = 0;
+  const timer = window.setInterval(() => {
+    enrollFiles.value[current] = { name: autoEnrollFiles[current], size: 48000 + current * 1200 };
+    updateEnrollPreview();
+    current += 1;
+    if (current >= 10) window.clearInterval(timer);
+  }, 120);
+}
+
+function onEnrollFileChange(index, event) {
+  const file = event.target.files?.[0] || null;
+  enrollFiles.value[index] = file;
+  updateEnrollPreview();
+}
+
+function useDefaultAuthSamples() {
+  authFileA.value = { name: 'auth_same.wav', size: 52000 };
+  authFileB.value = { name: 'auth_same_b.wav', size: 53000 };
+  spectrumMode.value = 'same';
+  spectrumInstance?.setOption({
+    legend: { data: ['Auth Sample A', 'Auth Sample B'] },
+    series: [
+      { name: 'Auth Sample A', data: sameSpectrumA, lineStyle: { color: '#22d3ee' }, areaStyle: { color: 'rgba(34,211,238,0.12)' } },
+      { name: 'Auth Sample B', data: sameSpectrumB, lineStyle: { color: '#34d399' }, areaStyle: { color: 'rgba(52,211,153,0.12)' } },
+    ],
+  }, true);
+  authResult.value = {
+    label: 'Authenticated',
+    score: '0.9655',
+    threshold: '0.65',
+    cost: '54 ms',
+    pass: true,
+  };
+}
+
+function runAuthDemo() {
+  if (!authFileA.value || !authFileB.value) {
+    authResult.value = { label: '请先上传两段样本', score: '--', threshold: '0.65', cost: '--', pass: false };
+    return;
+  }
+
+  const s1 = pseudoSpectrumFromFile(authFileA.value, 2);
+  const s2 = pseudoSpectrumFromFile(authFileB.value, 3);
+  const distance = s1.reduce((acc, v, i) => acc + Math.abs(v - s2[i]), 0) / s1.length;
+  const score = Math.max(0, Math.min(1, 1 - distance / 30));
+  const pass = score >= 0.65;
+
+  spectrumMode.value = 'diff';
+  spectrumInstance?.setOption({
+    legend: { data: ['Auth Sample A', 'Auth Sample B'] },
+    series: [
+      { name: 'Auth Sample A', data: s1, lineStyle: { color: '#22d3ee' }, areaStyle: { color: 'rgba(34,211,238,0.12)' } },
+      { name: 'Auth Sample B', data: s2, lineStyle: { color: pass ? '#34d399' : '#ef4444' }, areaStyle: { color: pass ? 'rgba(52,211,153,0.12)' : 'rgba(239,68,68,0.10)' } },
+    ],
+  });
+
+  authResult.value = {
+    label: pass ? 'Authenticated' : 'Rejected',
+    score: score.toFixed(4),
+    threshold: '0.65',
+    cost: `${42 + Math.round(distance)} ms`,
+    pass,
+  };
+}
+
+function runAuthRejectDemo() {
+  authFileA.value = authRejectFiles[0];
+  authFileB.value = authRejectFiles[1];
+  const s1 = diffSpectrumA;
+  const s2 = diffSpectrumB;
+  spectrumMode.value = 'diff';
+  spectrumInstance?.setOption({
+    legend: { data: ['Auth Sample A', 'Attack Sample B'] },
+    series: [
+      { name: 'Auth Sample A', data: s1, lineStyle: { color: '#22d3ee' }, areaStyle: { color: 'rgba(34,211,238,0.12)' } },
+      { name: 'Attack Sample B', data: s2, lineStyle: { color: '#ef4444' }, areaStyle: { color: 'rgba(239,68,68,0.10)' } },
+    ],
+  }, true);
+  authResult.value = {
+    label: 'Rejected',
+    score: '0.3184',
+    threshold: '0.65',
+    cost: '57 ms',
+    pass: false,
+  };
+}
+
+function runAutoDemo() {
+  runEnrollAutoDemo();
+  window.setTimeout(() => {
+    useDefaultAuthSamples();
+    runAuthDemo();
+  }, 1350);
 }
 
 function handleScroll() {
