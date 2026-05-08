@@ -16,8 +16,8 @@
           <a href="#scenarios">应用场景</a>
         </nav>
         <div class="auth-actions">
-          <button class="login-btn" type="button">登录</button>
-          <button class="register-btn" type="button">注册</button>
+          <button class="login-btn" type="button" @click="openAuthModal('login')">登录</button>
+          <button class="register-btn" type="button" @click="openAuthModal('register')">注册</button>
         </div>
       </div>
     </header>
@@ -38,7 +38,7 @@
           <div class="hero-actions">
             <a class="primary-cta" href="#principles">查看核心技术原理</a>
             <a class="secondary-cta" href="#performance">浏览完整测试数据</a>
-            <button class="secondary-cta demo-launch" type="button" @click="runAutoDemo">一键自动认证</button>
+            <button class="secondary-cta demo-launch" type="button" @click="runAutoDemo">快速进入系统</button>
           </div>
         </div>
 
@@ -184,8 +184,8 @@
                     批量上传注册样本
                     <input type="file" accept="audio/*" multiple @change="onEnrollBatchChange" />
                   </label>
-                  <button class="ghost-demo-btn" type="button" @click="useDefaultEnrollSamples">使用默认样本</button>
-                  <button class="ghost-demo-btn" type="button" @click="runEnrollAutoDemo">自动采集 10 组样本</button>
+                  <button class="ghost-demo-btn" type="button" @click="useDefaultEnrollSamples">加载本地采集样本</button>
+                  <button class="ghost-demo-btn" type="button" @click="runEnrollAutoDemo">开始采集 10 组样本</button>
                   <div class="sample-chips">
                     <span v-for="idx in 10" :key="`chip-${idx}`" :class="{ active: enrollFiles[idx - 1] }">{{ idx }}</span>
                   </div>
@@ -196,7 +196,7 @@
                 <b>{{ enrollProgress }}%</b>
                 <i :style="{ width: enrollProgress + '%' }"></i>
               </div>
-              <p class="demo-hint">支持手动上传 10 个样本，也可以使用默认样本或一键完成注册采集流程。</p>
+              <p class="demo-hint">支持导入 10 组本地音频样本，系统将自动提取 HCR 特征并生成个人认证模板。</p>
               <div class="mockup-bars enroll"></div>
             </div>
           </div>
@@ -229,11 +229,11 @@
                   </label>
                 </div>
                 <div class="auth-action-grid">
-                  <button class="ghost-demo-btn" type="button" @click="useDefaultAuthSamples">合法用户样本</button>
+                  <button class="ghost-demo-btn" type="button" @click="useDefaultAuthSamples">导入本人样本</button>
                   <button class="auth-demo-btn" type="button" @click="runAuthDemo">开始认证分析</button>
-                  <button class="danger-demo-btn" type="button" @click="runAuthRejectDemo">攻击样本演示</button>
+                  <button class="danger-demo-btn" type="button" @click="runAuthRejectDemo">导入异常样本</button>
                 </div>
-                <p class="demo-hint">选择合法用户样本可展示认证通过，选择攻击样本可展示非法样本被拒绝。</p>
+                <p class="demo-hint">系统将对当前样本与已注册模板进行相似度匹配，并输出认证判定结果。</p>
               </div>
               <div class="auth-result-banner" :class="authResult.pass ? 'success' : 'danger'">
                 <div>
@@ -386,6 +386,28 @@
       <h2>让佩戴耳机，成为最自然、最安全的身份证明</h2>
       <p>骨振识息 BoneVibAuth · 生物识别 · 骨传导 · 信息安全</p>
     </footer>
+
+    <div v-if="authModalVisible" class="auth-modal-mask" @click.self="closeAuthModal">
+      <div class="auth-modal-card">
+        <button class="modal-close" type="button" @click="closeAuthModal">×</button>
+        <span class="panel-tag cyan">{{ authModalMode === 'login' ? 'User Login' : 'User Register' }}</span>
+        <h3>{{ authModalMode === 'login' ? '用户登录' : '新用户注册' }}</h3>
+        <p>{{ authModalMode === 'login' ? '登录后进入 BoneVibAuth 认证工作台。' : '完成基础账号创建后，系统将进入 HCR 样本采集与模板生成流程。' }}</p>
+        <div class="modal-form">
+          <label>
+            <span>用户编号</span>
+            <input v-model="authForm.userId" placeholder="BVA-2026-001" />
+          </label>
+          <label>
+            <span>访问密钥</span>
+            <input v-model="authForm.password" type="password" placeholder="请输入访问密钥" />
+          </label>
+        </div>
+        <button class="modal-primary-btn" type="button" @click="confirmAuthModal">
+          {{ authModalMode === 'login' ? '进入认证工作台' : '创建账号并采集样本' }}
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -395,6 +417,9 @@ import * as echarts from 'echarts';
 
 const navScrolled = ref(false);
 const spectrumMode = ref('same');
+const authModalVisible = ref(false);
+const authModalMode = ref('login');
+const authForm = ref({ userId: 'BVA-2026-001', password: '••••••••' });
 
 const enrollFiles = ref(Array(10).fill(null));
 const enrollProgress = ref(0);
@@ -659,6 +684,26 @@ function initCharts() {
 function setSpectrum(mode) {
   spectrumMode.value = mode;
   spectrumInstance?.setOption(buildSpectrumOption(mode), true);
+}
+
+function openAuthModal(mode) {
+  authModalMode.value = mode;
+  authModalVisible.value = true;
+}
+
+function closeAuthModal() {
+  authModalVisible.value = false;
+}
+
+function confirmAuthModal() {
+  authModalVisible.value = false;
+  const target = document.querySelector('.preview-grid');
+  target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (authModalMode.value === 'login') {
+    useDefaultAuthSamples();
+  } else {
+    runAutoDemo();
+  }
 }
 
 function pseudoSpectrumFromFile(file, variant = 0) {

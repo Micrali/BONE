@@ -356,6 +356,16 @@ main { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
 .footer-tag { color: var(--cyan); font-weight: 900; letter-spacing: 0.12em; }
 .page-footer h2 { margin: 16px auto; max-width: 900px; font-size: clamp(2rem, 4vw, 4.8rem); line-height: 1.05; letter-spacing: -0.05em; }
 .page-footer p { color: var(--muted); }
+.auth-modal-mask { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 24px; background: rgba(1, 6, 15, 0.72); backdrop-filter: blur(16px); }
+.auth-modal-card { position: relative; width: min(460px, 100%); padding: 30px; border-radius: 28px; border: 1px solid rgba(34,211,238,0.26); background: linear-gradient(180deg, rgba(13,27,52,0.98), rgba(6,14,28,0.96)); box-shadow: 0 28px 90px rgba(0,0,0,0.48), inset 0 1px 0 rgba(255,255,255,0.08); }
+.auth-modal-card h3 { margin: 14px 0 8px; font-size: 1.8rem; }
+.auth-modal-card p { margin: 0 0 18px; color: var(--muted); }
+.modal-close { position: absolute; right: 18px; top: 16px; width: 34px; height: 34px; border: 1px solid rgba(148,169,201,0.18); border-radius: 50%; cursor: pointer; color: #dbeafe; background: rgba(255,255,255,0.06); font-size: 1.35rem; line-height: 1; }
+.modal-form { display: grid; gap: 12px; margin-bottom: 18px; }
+.modal-form label { display: grid; gap: 7px; color: #9ab0d3; font-size: 0.84rem; font-weight: 900; }
+.modal-form input { width: 100%; padding: 13px 14px; border-radius: 14px; border: 1px solid rgba(34,211,238,0.22); outline: none; color: #f8fbff; background: rgba(255,255,255,0.06); }
+.modal-form input:focus { border-color: rgba(34,211,238,0.66); box-shadow: 0 0 0 4px rgba(34,211,238,0.10); }
+.modal-primary-btn { width: 100%; border: none; cursor: pointer; padding: 13px 16px; border-radius: 16px; color: #03111d; background: linear-gradient(135deg, var(--cyan), var(--green)); font-weight: 950; box-shadow: 0 16px 34px rgba(34,211,238,0.24); }
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease-out, transform 0.65s ease-out; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
