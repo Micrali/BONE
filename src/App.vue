@@ -215,24 +215,37 @@
                   <span>Session：AUTH-2026-0506</span>
                 </div>
               </div>
-              <div class="auth-upload-row">
-                <label class="upload-item wide">
-                  <span>认证样本 A</span>
-                  <input type="file" accept="audio/*" @change="authFileA = $event.target.files?.[0] || null" />
-                </label>
-                <label class="upload-item wide">
-                  <span>认证样本 B</span>
-                  <input type="file" accept="audio/*" @change="authFileB = $event.target.files?.[0] || null" />
-                </label>
-                <button class="ghost-demo-btn" type="button" @click="useDefaultAuthSamples">默认通过样本</button>
-                <button class="auth-demo-btn" type="button" @click="runAuthDemo">开始认证分析</button>
-                <button class="ghost-demo-btn full-row" type="button" @click="runAuthRejectDemo">默认攻击样本</button>
+              <div class="auth-console-panel">
+                <div class="auth-upload-row">
+                  <label class="upload-item wide">
+                    <span>认证样本 A</span>
+                    <strong>{{ authFileA?.name || '点击选择音频' }}</strong>
+                    <input type="file" accept="audio/*" @change="authFileA = $event.target.files?.[0] || null" />
+                  </label>
+                  <label class="upload-item wide">
+                    <span>认证样本 B</span>
+                    <strong>{{ authFileB?.name || '点击选择音频' }}</strong>
+                    <input type="file" accept="audio/*" @change="authFileB = $event.target.files?.[0] || null" />
+                  </label>
+                </div>
+                <div class="auth-action-grid">
+                  <button class="ghost-demo-btn" type="button" @click="useDefaultAuthSamples">合法用户样本</button>
+                  <button class="auth-demo-btn" type="button" @click="runAuthDemo">开始认证分析</button>
+                  <button class="danger-demo-btn" type="button" @click="runAuthRejectDemo">攻击样本演示</button>
+                </div>
+                <p class="demo-hint">选择合法用户样本可展示认证通过，选择攻击样本可展示非法样本被拒绝。</p>
               </div>
-              <p class="demo-hint">可选择默认通过样本展示合法用户认证结果，也可选择默认攻击样本展示非法样本拒绝结果。</p>
+              <div class="auth-result-banner" :class="authResult.pass ? 'success' : 'danger'">
+                <div>
+                  <span>认证结果</span>
+                  <strong>{{ authResult.label }}</strong>
+                </div>
+                <i>{{ authResult.pass ? 'PASS' : 'DENY' }}</i>
+              </div>
               <div class="mockup-result-box" :class="authResult.pass ? 'success' : 'danger'">
-                <div><span>认证结果</span><b>{{ authResult.label }}</b></div>
                 <div><span>得分 / 阈值</span><b>{{ authResult.score }} / {{ authResult.threshold }}</b></div>
                 <div><span>响应耗时</span><b>{{ authResult.cost }}</b></div>
+                <div><span>判定策略</span><b>{{ authResult.pass ? '模板相似' : '差异过大' }}</b></div>
               </div>
               <div class="mockup-form-grid compact">
                 <div><span>验证样本</span><b>双样本上传</b></div>

@@ -230,12 +230,96 @@ main { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
 .sample-chips span { display: grid; place-items: center; min-height: 24px; border-radius: 8px; color: #7087ad; background: rgba(255,255,255,0.06); border: 1px solid rgba(148, 169, 201, 0.12); font-size: 0.74rem; font-weight: 900; }
 .sample-chips span.active { color: #03111d; background: var(--green); box-shadow: 0 0 14px rgba(52,211,153,0.22); }
 .demo-hint { margin: 0 0 12px; color: #9ab0d3; font-size: 0.82rem; }
-.auth-upload-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.upload-item { display: grid; gap: 8px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(148, 169, 201, 0.16); }
-.upload-item span { color: #9ab0d3; font-size: 0.78rem; font-weight: 800; }
-.upload-item input { width: 100%; color: #cfe2ff; font-size: 0.78rem; }
-.auth-demo-btn { grid-column: 1 / -1; color: #03111d; background: linear-gradient(135deg, var(--cyan), var(--green)); }
-.full-row { grid-column: 1 / -1; }
+.auth-console-panel {
+  margin-bottom: 14px;
+  padding: 14px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(34,211,238,0.18), transparent 34%),
+    rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(34, 211, 238, 0.18);
+}
+.auth-upload-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.upload-item {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 8px;
+  min-height: 86px;
+  padding: 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.075), rgba(255,255,255,0.035));
+  border: 1px solid rgba(148, 169, 201, 0.18);
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+}
+.upload-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(34,211,238,0.48);
+  background: linear-gradient(180deg, rgba(34,211,238,0.13), rgba(255,255,255,0.045));
+}
+.upload-item::after {
+  content: "上传";
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #03111d;
+  background: var(--cyan);
+  font-size: 0.68rem;
+  font-weight: 950;
+}
+.upload-item span { color: #9ab0d3; font-size: 0.78rem; font-weight: 900; }
+.upload-item strong {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-right: 48px;
+  color: #f8fbff;
+  font-size: 0.95rem;
+}
+.upload-item input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.auth-action-grid { display: grid; grid-template-columns: 1fr 1.35fr 1fr; gap: 10px; }
+.auth-demo-btn, .danger-demo-btn {
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-weight: 950;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.auth-demo-btn { color: #03111d; background: linear-gradient(135deg, var(--cyan), var(--green)); box-shadow: 0 14px 28px rgba(34,211,238,0.2); }
+.danger-demo-btn { color: #ffe8e8; background: rgba(239, 68, 68, 0.13); border: 1px solid rgba(239, 68, 68, 0.26); }
+.auth-demo-btn:hover, .danger-demo-btn:hover, .ghost-demo-btn:hover { transform: translateY(-2px); }
+.auth-result-banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 12px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  border: 1px solid rgba(148,169,201,0.18);
+}
+.auth-result-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  transform: translateX(-100%);
+  animation: shimmer 2.2s linear infinite;
+}
+.auth-result-banner span { position: relative; display: block; color: #c8d5ee; font-size: 0.78rem; font-weight: 900; }
+.auth-result-banner strong { position: relative; display: block; margin-top: 3px; font-size: 1.65rem; line-height: 1; }
+.auth-result-banner i { position: relative; font-style: normal; font-weight: 950; letter-spacing: 0.14em; opacity: 0.75; }
+.auth-result-banner.success { color: #dffdf4; background: linear-gradient(135deg, rgba(52,211,153,0.22), rgba(34,211,238,0.15)); border-color: rgba(52,211,153,0.36); }
+.auth-result-banner.danger { color: #ffe1e1; background: linear-gradient(135deg, rgba(239,68,68,0.22), rgba(249,115,22,0.10)); border-color: rgba(239,68,68,0.34); }
 .mockup-result-box.danger div:first-child b { color: var(--red); }
 .mockup-bars { position: relative; height: 66px; border-radius: 22px; background: linear-gradient(90deg, transparent, rgba(34,211,238,0.18), transparent), repeating-linear-gradient(90deg, var(--cyan) 0 10px, transparent 10px 19px); opacity: 0.92; animation: waveShift 2s linear infinite; box-shadow: 0 0 28px rgba(34,211,238,0.20); }
 .mockup-bars::before, .mockup-bars::after { content: ""; position: absolute; top: 50%; width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(34,211,238,0.65); transform: translateY(-50%); }
@@ -279,6 +363,7 @@ main { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
 @keyframes pulseWave { 0% { transform: scale(0.75); opacity: 0.8; } 100% { transform: scale(1.2); opacity: 0; } }
 @keyframes floatCard { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 @keyframes waveShift { from { background-position: 0 0; } to { background-position: 36px 0; } }
+@keyframes shimmer { to { transform: translateX(100%); } }
 
 @media (max-width: 1180px) {
   .hero-content, .dual-panel, .solution-visual, .preview-grid, .user-study-grid, .two-left, .equal-grid { grid-template-columns: 1fr; }
@@ -294,7 +379,7 @@ main { width: min(1240px, calc(100% - 48px)); margin: 0 auto; }
   .nav-links { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
   .auth-actions { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
   .hero-section { padding-top: 170px; }
-  .hero-metrics, .innovation-grid, .dashboard-grid, .scenario-grid, .flow-line, .console-metrics, .mockup-form-grid, .mockup-result-box, .auth-upload-row { grid-template-columns: 1fr; }
+  .hero-metrics, .innovation-grid, .dashboard-grid, .scenario-grid, .flow-line, .console-metrics, .mockup-form-grid, .mockup-result-box, .auth-upload-row, .auth-action-grid { grid-template-columns: 1fr; }
   .sample-uploader { grid-template-columns: 1fr; }
   .sample-ring { margin: 0 auto; }
   .scenario-card { min-height: 250px; }
